@@ -8,38 +8,39 @@
 <body>
   <h1>My Profile</h1>
   <div class="submit-form" id="profile-form">
-    <p><strong>Your Karma:</strong> <span id="karma-count">0</span></p>
-    <label>Your Company Name: <input type="text" id="company-input" placeholder="Enter your company name"/></label>
+    <label>Your Name: <input type="text" id="user-name" placeholder="Enter your name"/></label>
+    <label>Your Company Name: <input type="text" id="company-name" placeholder="Enter your company"/></label>
     <button id="save-profile">Save Profile</button>
+    <p><strong>Total Karma:</strong> <span id="karma-count">0</span></p>
     <p><strong>Likes Received:</strong> <span id="likes-count">0</span></p>
     <p><strong>Comments Received:</strong> <span id="comments-count">0</span></p>
   </div>
 <script>
-function loadData() {
-  if(!localStorage.getItem('companies')) {
-    localStorage.setItem('companies', JSON.stringify([]));
+function loadProfile() {
+  if(!localStorage.getItem('profile')) {
+    localStorage.setItem('profile', JSON.stringify({user:'Guest',company:''}));
   }
-  if(!localStorage.getItem('karma')) {
-    localStorage.setItem('karma', '0');
-  }
+  if(!localStorage.getItem('karma')) localStorage.setItem('karma','0');
 }
 function renderProfile() {
-  const profile = JSON.parse(localStorage.getItem('profile')) || {};
-  document.getElementById('company-input').value = profile.company || '';
+  const profile = JSON.parse(localStorage.getItem('profile'));
+  document.getElementById('user-name').value = profile.user;
+  document.getElementById('company-name').value = profile.company;
   document.getElementById('karma-count').textContent = localStorage.getItem('karma');
   const companies = JSON.parse(localStorage.getItem('companies'));
-  const mine = companies.find(c => c.name === profile.company);
-  document.getElementById('likes-count').textContent = mine ? mine.likes : 0;
-  document.getElementById('comments-count').textContent = mine ? mine.comments.length : 0;
+  const mine = companies.find(c=>c.id && c.name===profile.company);
+  document.getElementById('likes-count').textContent = mine?mine.likes:0;
+  document.getElementById('comments-count').textContent = mine?mine.comments.length:0;
 }
-document.getElementById('save-profile').addEventListener('click', function(){
-  const company = document.getElementById('company-input').value.trim();
-  localStorage.setItem('profile', JSON.stringify({company}));
+document.getElementById('save-profile').onclick = function(){
+  const user = document.getElementById('user-name').value.trim()||'Guest';
+  const company = document.getElementById('company-name').value.trim();
+  localStorage.setItem('profile', JSON.stringify({user,company}));
   renderProfile();
   alert('Profile saved!');
-});
-window.addEventListener('DOMContentLoaded', () => {
-  loadData();
+};
+window.addEventListener('DOMContentLoaded', ()=>{
+  loadProfile();
   renderProfile();
 });
 </script>
