@@ -1,69 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KarmaKit</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <img src="karmakit-logo.png" alt="KarmaKit Logo" class="logo" />
-    <h1>KarmaKit</h1>
-    <p class="tagline">Helping builders get users and validate ideas</p>
-    <nav>
-      <button onclick="location.href='profile.html'">My Profile</button>
-      <button onclick="location.href='submit.html'">Sign Up</button>
-    </nav>
-  </header>
-
-  <main>
-    <div class="card-container" id="cardContainer"></div>
-    <div class="controls">
-      <button onclick="swipeLeft()">Swipe Left</button>
-      <button onclick="swipeRight()">Swipe Right</button>
-    </div>
-    <button class="submit-cta" onclick="location.href='submit.html'">Submit your idea/app</button>
-  </main>
-
-  <script>
-    const companies = [
-      { name: "Acme Analytics", logo: "https://via.placeholder.com/100", idea: "AI-powered insights for startups", link: "https://play.google.com" },
-      { name: "Beta Builders", logo: "https://via.placeholder.com/100", idea: "Simple project tracking for devs", link: "https://play.google.com" },
-      { name: "CodeCoach", logo: "https://via.placeholder.com/100", idea: "Get real-time code feedback", link: "https://play.google.com" },
-      { name: "Foodie", logo: "https://via.placeholder.com/100", idea: "AR-based restaurant menu viewer", link: "https://play.google.com" },
-      { name: "MoodMate", logo: "https://via.placeholder.com/100", idea: "AI therapy chat and journaling app", link: "https://play.google.com" },
-      { name: "GreenGo", logo: "https://via.placeholder.com/100", idea: "Track your carbon footprint", link: "https://play.google.com" },
-      { name: "KidzLearn", logo: "https://via.placeholder.com/100", idea: "Interactive STEM lessons for kids", link: "https://play.google.com" },
-      { name: "PulseTrack", logo: "https://via.placeholder.com/100", idea: "Fitness tracker with social gamification", link: "https://play.google.com" },
-      { name: "RentRadar", logo: "https://via.placeholder.com/100", idea: "Find safe, reviewed short-term rentals", link: "https://play.google.com" },
-      { name: "SwiftForm", logo: "https://via.placeholder.com/100", idea: "Instant forms for hackathon demos", link: "https://play.google.com" }
-    ];
-    let currentIndex = 0;
-    const container = document.getElementById('cardContainer');
-    function renderCard() {
-      const { name, logo, idea, link } = companies[currentIndex];
-      container.innerHTML = `
-        <div class="card">
-          <h2>${name}</h2>
-          <img src="${logo}" alt="${name} logo" class="card-logo" />
-          <p><strong>Idea:</strong> ${idea}</p>
-          <div class="card-actions">
-            <a href="${link}" target="_blank">🔗 Link</a>
-            <button onclick="alert('Comment functionality coming soon!')">Write Comment</button>
-          </div>
-        </div>
-      `;
-    }
-    function swipeLeft() {
-      currentIndex = (currentIndex - 1 + companies.length) % companies.length;
-      renderCard();
-    }
-    function swipeRight() {
-      currentIndex = (currentIndex + 1) % companies.length;
-      renderCard();
-    }
-    renderCard();
-  </script>
+<header>
+  <img src="karmakit-logo.png" class="logo" alt="KarmaKit Logo"/>
+  <h1>KarmaKit</h1>
+  <p class="tagline">Helping builders get users and validate ideas</p>
+  <nav>
+    <button onclick="location.href='profile.html'">My Profile</button>
+    <button onclick="location.href='submit.html'">Submit Idea</button>
+  </nav>
+</header>
+<main>
+  <div class="card-container" id="card-container"></div>
+  <div class="controls">
+    <button id="pass-btn">Maybe Later</button>
+    <button id="like-btn">Love This!</button>
+  </div>
+  <button class="submit-cta" onclick="location.href='submit.html'">Submit your idea/app</button>
+</main>
+<script>
+// Default companies
+const defaultCompanies = [
+  {name:"Acme Analytics",logo:"https://via.placeholder.com/100",idea:"AI-powered insights for startups",link:"https://play.google.com",likes:0,comments:[]},
+  {name:"Beta Builders",logo:"https://via.placeholder.com/100",idea:"Simple project tracking for devs",link:"https://play.google.com",likes:0,comments:[]}
+];
+// Initialize data
+function init() {
+  if(!localStorage.getItem('companies')) {
+    localStorage.setItem('companies', JSON.stringify(defaultCompanies));
+  }
+  if(!localStorage.getItem('karma')) {
+    localStorage.setItem('karma', '0');
+  }
+}
+let companies, currentIndex = 0;
+function load() {
+  companies = JSON.parse(localStorage.getItem('companies'));
+}
+function saveCompanies() {
+  localStorage.setItem('companies', JSON.stringify(companies));
+}
+function addKarma(points) {
+  let k = parseInt(localStorage.getItem('karma'), 10);
+  k += points;
+  localStorage.setItem('karma', k.toString());
+}
+function renderCard() {
+  const c = companies[currentIndex];
+  const container = document.getElementById('card-container');
+  container.innerHTML = `
+    <h2>${c.name}</h2>
+    <img src="${c.logo}" class="card-logo" alt="${c.name}">
+    <p><strong>Idea:</strong> ${c.idea}</p>
+    <p class="likes">Likes: ${c.likes}</p>
+    <div class="card-actions">
+      <a href="${c.link}" target="_blank">🔗 Link</a>
+      <button id="comment-btn">Comment</button>
+    </div>`;
+  document.getElementById('comment-btn').addEventListener('click', handleComment);
+}
+function nextCard() {
+  currentIndex = (currentIndex + 1) % companies.length;
+  renderCard();
+}
+function handlePass() {
+  addKarma(1);
+  nextCard();
+}
+function handleLike() {
+  companies[currentIndex].likes++;
+  saveCompanies();
+  addKarma(2);
+  nextCard();
+}
+function handleComment() {
+  const text = prompt("Enter your feedback:");
+  if(text) {
+    companies[currentIndex].comments.push(text);
+    saveCompanies();
+    addKarma(3);
+    alert("Thanks for your feedback!");
+  }
+}
+window.addEventListener('DOMContentLoaded', () => {
+  init();
+  load();
+  renderCard();
+  document.getElementById('pass-btn').addEventListener('click', handlePass);
+  document.getElementById('like-btn').addEventListener('click', handleLike);
+});
+</script>
 </body>
 </html>

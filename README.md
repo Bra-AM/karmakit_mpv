@@ -1,36 +1,26 @@
-# KarmaKit
+# KarmaKit Functional MVP
 
-KarmaKit is a pop-up feedback exchange platform built for hackathons, demo days, and startup communities. Builders get feedback. Reviewers earn Karma Points.
+This is a fully functional static MVP for KarmaKit.
 
-## 🔥 Features
-- Swipe through 10 featured project cards
-- Leave comments (coming soon)
-- Earn Karma Points (mocked)
-- Submit your own app for feedback
-- View your profile with Karma count and app info
+## Features
+- **Submit** new ideas (+5 karma)
+- **Swipe** through ideas:
+  - "Maybe Later" (+1 karma)
+  - "Love This!" (+2 karma)
+- **Comment** on ideas (+3 karma)
+- **Profile** shows:
+  - Total karma
+  - Likes your company received
+  - Comments your company received
 
-## 🛠 Tech Stack
-- HTML / CSS / JavaScript
-- No backend (yet) — static MVP
-- Easily deployed to GitHub Pages, Netlify, or Vercel
+## Deployment
+Just host these files on any static server (GitHub Pages, Netlify, Vercel).
 
-## 🚀 Deployment Steps (GitHub Pages)
-1. Create or clone your repo
-2. Add these files:
-   - `index.html`
-   - `submit.html`
-   - `profile.html`
-   - `style.css`
-   - `karmakit-logo.png`
-   - `README.md`
-3. Commit and push to `main`
-4. In GitHub, go to **Settings > Pages**, set source to `main` branch `/ (root)`
-5. Visit your live site!
+## Files
+- index.html
+- submit.html
+- profile.html
+- style.css
+- karmakit-logo.png
 
-## ✅ Future Improvements
-- Store data using `localStorage` or Firebase
-- Comment section with voting
-- User authentication
-- Real Karma Point leaderboard
-
-Built with 💛 at SpurHacks 2025
+Enjoy building! ❤️
