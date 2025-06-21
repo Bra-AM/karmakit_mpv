@@ -1,34 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Submit Your Idea/App - KarmaKit</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Idea - KarmaKit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>Submit Your Idea/App</h1>
-  <form class="submit-form" id="submit-form">
-    <label>Company Name: <input type="text" id="comp-name" required /></label>
-    <label>Logo URL: <input type="url" id="comp-logo" placeholder="https://example.com/logo.png" /></label>
-    <label>App Link (Play Store or Web): <input type="url" id="comp-link" placeholder="https://example.com" /></label>
-    <label>1-Sentence Idea: <textarea id="comp-idea" required></textarea></label>
-    <button type="submit">Submit</button>
-  </form>
+<header>
+  <img src="karmakit-logo.png" class="logo" alt="KarmaKit">
+  <h1>Submit Your Idea</h1>
+</header>
+<form class="submit-form" id="submit-form">
+  <label>Company Name: <input type="text" id="comp-name" required></label>
+  <label>Logo URL: <input type="url" id="comp-logo"></label>
+  <label>Link: <input type="url" id="comp-link"></label>
+  <label>Idea (one sentence):<textarea id="comp-idea" required></textarea></label>
+  <button type="submit">Submit Idea</button>
+</form>
 <script>
-document.getElementById('submit-form').addEventListener('submit', function(e){
+document.getElementById('submit-form').onsubmit = e => {
   e.preventDefault();
-  let name = document.getElementById('comp-name').value.trim();
-  let logo = document.getElementById('comp-logo').value.trim() || 'https://via.placeholder.com/100';
-  let link = document.getElementById('comp-link').value.trim() || '#';
-  let idea = document.getElementById('comp-idea').value.trim();
-  let companies = JSON.parse(localStorage.getItem('companies'));
-  companies.push({name,logo,idea,link,likes:0,comments:[]});
+  const name = document.getElementById('comp-name').value.trim();
+  const logo = document.getElementById('comp-logo').value.trim() || 'https://via.placeholder.com/100';
+  const link = document.getElementById('comp-link').value.trim() || '#';
+  const idea = document.getElementById('comp-idea').value.trim();
+  const companies = JSON.parse(localStorage.getItem('companies'));
+  const id = Math.max(...companies.map(c=>c.id))+1;
+  companies.push({id,name,logo,idea,link,likes:0,comments:[]});
   localStorage.setItem('companies', JSON.stringify(companies));
-  let k = parseInt(localStorage.getItem('karma'),10);
-  localStorage.setItem('karma', (k+5).toString());
-  alert('Idea submitted! +5 karma.');
-  window.location = 'index.html';
-});
+  addKarma(5);
+  alert('Idea added! +5 karma');
+  navigate('index.html');
+};
+function navigate(p){window.location=p;}
+function addKarma(points){
+  let k=parseInt(localStorage.getItem('karma'),10); k+=points;
+  localStorage.setItem('karma',k.toString());
+}
 </script>
 </body>
 </html>
