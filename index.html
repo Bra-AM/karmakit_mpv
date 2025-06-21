@@ -14,7 +14,6 @@
     <button onclick="location.href='profile.html'">My Profile</button>
     <button onclick="location.href='submit.html'">Submit Idea</button>
   </nav>
-  <p id="greeting"></p>
 </header>
 <main>
   <div class="card-container" id="card-container"></div>
@@ -25,58 +24,75 @@
   <button class="submit-cta" onclick="location.href='submit.html'">Submit your idea/app</button>
 </main>
 <script>
-// Initialize data and profile
+// Default companies
+const defaultCompanies = [
+  {name:"Acme Analytics",logo:"https://via.placeholder.com/100",idea:"AI-powered insights for startups",link:"https://play.google.com",likes:0,comments:[]},
+  {name:"Beta Builders",logo:"https://via.placeholder.com/100",idea:"Simple project tracking for devs",link:"https://play.google.com",likes:0,comments:[]}
+];
+// Initialize data
 function init() {
   if(!localStorage.getItem('companies')) {
-    localStorage.setItem('companies', JSON.stringify([
-      {id:1,name:"Acme Analytics",logo:"https://via.placeholder.com/100",idea:"AI-powered insights for startups",link:"https://play.google.com",likes:0,comments:[]},
-      {id:2,name:"Beta Builders",logo:"https://via.placeholder.com/100",idea:"Simple project tracking for devs",link:"https://play.google.com",likes:0,comments:[]}
-    ]));
+    localStorage.setItem('companies', JSON.stringify(defaultCompanies));
   }
-  if(!localStorage.getItem('karma')) localStorage.setItem('karma','0');
-  if(!localStorage.getItem('profile')) localStorage.setItem('profile', JSON.stringify({user:'Guest',company:''}));
+  if(!localStorage.getItem('karma')) {
+    localStorage.setItem('karma', '0');
+  }
 }
-let companies, currentIndex=0;
-function load() { companies = JSON.parse(localStorage.getItem('companies')); }
-function saveCompanies() { localStorage.setItem('companies', JSON.stringify(companies)); }
+let companies, currentIndex = 0;
+function load() {
+  companies = JSON.parse(localStorage.getItem('companies'));
+}
+function saveCompanies() {
+  localStorage.setItem('companies', JSON.stringify(companies));
+}
 function addKarma(points) {
-  let k = parseInt(localStorage.getItem('karma'),10); k+=points;
-  localStorage.setItem('karma',k.toString());
+  let k = parseInt(localStorage.getItem('karma'), 10);
+  k += points;
+  localStorage.setItem('karma', k.toString());
 }
 function renderCard() {
   const c = companies[currentIndex];
-  document.getElementById('card-container').innerHTML = `
+  const container = document.getElementById('card-container');
+  container.innerHTML = `
     <h2>${c.name}</h2>
     <img src="${c.logo}" class="card-logo" alt="${c.name}">
     <p><strong>Idea:</strong> ${c.idea}</p>
     <p class="likes">Likes: ${c.likes}</p>
-    <p class="comments-count">Comments: ${c.comments.length}</p>
     <div class="card-actions">
       <a href="${c.link}" target="_blank">🔗 Link</a>
       <button id="comment-btn">Comment</button>
     </div>`;
-  document.getElementById('comment-btn').onclick = handleComment;
+  document.getElementById('comment-btn').addEventListener('click', handleComment);
 }
-function nextCard() { currentIndex = (currentIndex+1)%companies.length; renderCard(); }
-function handlePass() { addKarma(1); nextCard(); }
-function handleLike() { companies[currentIndex].likes++; saveCompanies(); addKarma(2); nextCard(); }
+function nextCard() {
+  currentIndex = (currentIndex + 1) % companies.length;
+  renderCard();
+}
+function handlePass() {
+  addKarma(1);
+  nextCard();
+}
+function handleLike() {
+  companies[currentIndex].likes++;
+  saveCompanies();
+  addKarma(2);
+  nextCard();
+}
 function handleComment() {
-  const txt = prompt("Enter your feedback:");
-  if(txt) {
-    companies[currentIndex].comments.push(txt);
+  const text = prompt("Enter your feedback:");
+  if(text) {
+    companies[currentIndex].comments.push(text);
     saveCompanies();
     addKarma(3);
-    alert("Thanks for feedback!");
+    alert("Thanks for your feedback!");
   }
 }
-function greet() {
-  const profile = JSON.parse(localStorage.getItem('profile'));
-  document.getElementById('greeting').textContent = `Hello, ${profile.user}!`;
-}
-window.addEventListener('DOMContentLoaded', ()=> {
-  init(); load(); renderCard(); greet();
-  document.getElementById('pass-btn').onclick = handlePass;
-  document.getElementById('like-btn').onclick = handleLike;
+window.addEventListener('DOMContentLoaded', () => {
+  init();
+  load();
+  renderCard();
+  document.getElementById('pass-btn').addEventListener('click', handlePass);
+  document.getElementById('like-btn').addEventListener('click', handleLike);
 });
 </script>
 </body>

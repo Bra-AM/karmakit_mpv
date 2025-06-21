@@ -15,20 +15,20 @@
     <button type="submit">Submit</button>
   </form>
 <script>
-document.getElementById('submit-form').onsubmit = function(e){
+document.getElementById('submit-form').addEventListener('submit', function(e){
   e.preventDefault();
   let name = document.getElementById('comp-name').value.trim();
   let logo = document.getElementById('comp-logo').value.trim() || 'https://via.placeholder.com/100';
   let link = document.getElementById('comp-link').value.trim() || '#';
   let idea = document.getElementById('comp-idea').value.trim();
   let companies = JSON.parse(localStorage.getItem('companies'));
-  const newId = Math.max(...companies.map(c=>c.id)) + 1;
-  companies.push({id:newId,name,logo,idea,link,likes:0,comments:[]});
+  companies.push({name,logo,idea,link,likes:0,comments:[]});
   localStorage.setItem('companies', JSON.stringify(companies));
   let k = parseInt(localStorage.getItem('karma'),10);
   localStorage.setItem('karma', (k+5).toString());
   alert('Idea submitted! +5 karma.');
   window.location = 'index.html';
-};
+});
 </script>
-</body></html>
+</body>
+</html>
