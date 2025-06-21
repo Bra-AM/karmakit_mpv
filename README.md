@@ -14,12 +14,18 @@ KarmaKit is a pop-up feedback exchange platform built for hackathons, demo days,
 - No backend (yet) — static MVP
 - Easily deployed to GitHub Pages, Netlify, or Vercel
 
-## 🚀 Deployment Steps (GitHub + GitHub Pages)
-1. Fork or clone this repo
-2. Add all files: `index.html`, `submit.html`, `profile.html`, `style.css`
-3. Push to GitHub
-4. Go to repo Settings > Pages > Set source to `main` + root folder
-5. Visit the generated URL!
+## 🚀 Deployment Steps (GitHub Pages)
+1. Create or clone your repo
+2. Add these files:
+   - `index.html`
+   - `submit.html`
+   - `profile.html`
+   - `style.css`
+   - `karmakit-logo.png`
+   - `README.md`
+3. Commit and push to `main`
+4. In GitHub, go to **Settings > Pages**, set source to `main` branch `/ (root)`
+5. Visit your live site!
 
 ## ✅ Future Improvements
 - Store data using `localStorage` or Firebase
@@ -27,5 +33,4 @@ KarmaKit is a pop-up feedback exchange platform built for hackathons, demo days,
 - User authentication
 - Real Karma Point leaderboard
 
----
 Built with 💛 at SpurHacks 2025

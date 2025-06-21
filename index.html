@@ -39,10 +39,8 @@
       { name: "RentRadar", logo: "https://via.placeholder.com/100", idea: "Find safe, reviewed short-term rentals", link: "https://play.google.com" },
       { name: "SwiftForm", logo: "https://via.placeholder.com/100", idea: "Instant forms for hackathon demos", link: "https://play.google.com" }
     ];
-
     let currentIndex = 0;
     const container = document.getElementById('cardContainer');
-
     function renderCard() {
       const { name, logo, idea, link } = companies[currentIndex];
       container.innerHTML = `
@@ -57,17 +55,14 @@
         </div>
       `;
     }
-
     function swipeLeft() {
       currentIndex = (currentIndex - 1 + companies.length) % companies.length;
       renderCard();
     }
-
     function swipeRight() {
       currentIndex = (currentIndex + 1) % companies.length;
       renderCard();
     }
-
     renderCard();
   </script>
 </body>
