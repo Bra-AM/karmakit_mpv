@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarmaKit</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">K</div>
+    <h1>KarmaKit</h1>
+    <p class="tagline">Helping builders get users and validate ideas</p>
+    <nav>
+      <button onclick="location.href='profile.html'">My Profile</button>
+      <button onclick="location.href='submit.html'">Sign Up</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card-container" id="cardContainer"></div>
+    <div class="controls">
+      <button onclick="swipeLeft()">Swipe Left</button>
+      <button onclick="swipeRight()">Swipe Right</button>
+    </div>
+    <button class="submit-cta" onclick="location.href='submit.html'">Submit your idea/app</button>
+  </main>
+
+  <script>
+    const companies = [
+      { name: "Acme Analytics", logo: "https://via.placeholder.com/100", idea: "AI-powered insights for startups", link: "https://play.google.com" },
+      { name: "Beta Builders", logo: "https://via.placeholder.com/100", idea: "Simple project tracking for devs", link: "https://play.google.com" },
+      { name: "CodeCoach", logo: "https://via.placeholder.com/100", idea: "Get real-time code feedback", link: "https://play.google.com" },
+      { name: "Foodie", logo: "https://via.placeholder.com/100", idea: "AR-based restaurant menu viewer", link: "https://play.google.com" },
+      { name: "MoodMate", logo: "https://via.placeholder.com/100", idea: "AI therapy chat and journaling app", link: "https://play.google.com" },
+      { name: "GreenGo", logo: "https://via.placeholder.com/100", idea: "Track your carbon footprint", link: "https://play.google.com" },
+      { name: "KidzLearn", logo: "https://via.placeholder.com/100", idea: "Interactive STEM lessons for kids", link: "https://play.google.com" },
+      { name: "PulseTrack", logo: "https://via.placeholder.com/100", idea: "Fitness tracker with social gamification", link: "https://play.google.com" },
+      { name: "RentRadar", logo: "https://via.placeholder.com/100", idea: "Find safe, reviewed short-term rentals", link: "https://play.google.com" },
+      { name: "SwiftForm", logo: "https://via.placeholder.com/100", idea: "Instant forms for hackathon demos", link: "https://play.google.com" }
+    ];
+
+    let currentIndex = 0;
+    const container = document.getElementById('cardContainer');
+
+    function renderCard() {
+      const { name, logo, idea, link } = companies[currentIndex];
+      container.innerHTML = `
+        <div class="card">
+          <h2>${name}</h2>
+          <img src="${logo}" alt="${name} logo" class="card-logo" />
+          <p><strong>Idea:</strong> ${idea}</p>
+          <div class="card-actions">
+            <a href="${link}" target="_blank">🔗 Link</a>
+            <button onclick="alert('Comment functionality coming soon!')">Write Comment</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function swipeLeft() {
+      currentIndex = (currentIndex - 1 + companies.length) % companies.length;
+      renderCard();
+    }
+
+    function swipeRight() {
+      currentIndex = (currentIndex + 1) % companies.length;
+      renderCard();
+    }
+
+    renderCard();
+  </script>
+</body>
+</html>
