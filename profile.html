@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Profile - KarmaKit</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-  <img src="karmakit-logo.png" class="logo" alt="KarmaKit">
+  <img src="karmakit-logo.png" class="logo" alt="Logo">
   <h1>My Profile</h1>
 </header>
-<form class="profile-form" id="profile-form">
-  <label>Your Name: <input type="text" id="user-name" required></label>
-  <label>Your Company: <input type="text" id="company-name" required></label>
-  <button type="submit">Save Profile</button>
+<form class="profile-form" id="pf">
+  <label>Your Name:<input type="text" id="un"></label>
+  <label>Your Company:<input type="text" id="comp"></label>
+  <button type="submit">Save</button>
   <div class="meta">
-    <p>Total Karma: <strong id="karma-count">0</strong></p>
-    <p>Likes Received: <strong id="likes-count">0</strong></p>
-    <p>Comments Received: <strong id="comments-count">0</strong></p>
+    <p>Total Karma: <strong id="kc"></strong></p>
+    <p>Likes Received: <strong id="lc"></strong></p>
+    <p>Comments Received: <strong id="cc"></strong></p>
+    <p>Connections Received: <strong id="xc"></strong></p>
   </div>
 </form>
 <script>
-document.getElementById('profile-form').onsubmit = e => {
+document.getElementById('pf').onsubmit = e => {
   e.preventDefault();
-  const user = document.getElementById('user-name').value.trim();
-  const company = document.getElementById('company-name').value.trim();
-  localStorage.setItem('profile', JSON.stringify({user,company}));
-  renderProfile();
+  const user = document.getElementById('un').value.trim() || 'Guest';
+  const comp = document.getElementById('comp').value.trim();
+  localStorage.setItem('profile', JSON.stringify({user,company:comp}));
+  render();
 };
-function renderProfile(){
-  const profile = JSON.parse(localStorage.getItem('profile'));
-  document.getElementById('user-name').value = profile.user;
-  document.getElementById('company-name').value = profile.company;
-  document.getElementById('karma-count').textContent = localStorage.getItem('karma');
-  const comps = JSON.parse(localStorage.getItem('companies'));
-  const mine = comps.find(c=>c.id && c.name===profile.company);
-  document.getElementById('likes-count').textContent = mine?mine.likes:0;
-  document.getElementById('comments-count').textContent = mine?mine.comments.length:0;
+function render() {
+  const p = JSON.parse(localStorage.getItem('profile'));
+  document.getElementById('un').value = p.user;
+  document.getElementById('comp').value = p.company;
+  document.getElementById('kc').textContent = localStorage.getItem('karma');
+  const companies = JSON.parse(localStorage.getItem('companies'));
+  const mine = companies.find(c => c.id && c.name === p.company);
+  document.getElementById('lc').textContent = mine?mine.likes:0;
+  document.getElementById('cc').textContent = mine?mine.comments.length:0;
+  document.getElementById('xc').textContent = mine?mine.connections.length:0;
 }
-window.onload = renderProfile;
+window.onload = () => {
+  if(!localStorage.getItem('profile')) localStorage.setItem('profile', JSON.stringify({user:'Guest',company:''}));
+  render();
+};
 </script>
 </body>
 </html>

@@ -1,130 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>KarmaKit</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <img src="karmakit-logo.png" class="logo" alt="KarmaKit">
-    <h1>KarmaKit</h1>
-    <p class="tagline">Helping builders get users and validate ideas</p>
-    <nav>
-      <button onclick="navigate('index.html')">Home</button>
-      <button onclick="navigate('submit.html')">Submit Idea</button>
-      <button onclick="navigate('profile.html')">Profile</button>
-    </nav>
-    <p id="greeting"></p>
-  </header>
-  <main>
-    <div class="card-container" id="card-container"></div>
-    <div class="controls">
-      <button id="pass-btn">Maybe Later</button>
-      <button id="like-btn">Love This!</button>
-    </div>
-    <button class="submit-cta" onclick="navigate('submit.html')">Submit your idea/app</button>
-  </main>
-
-  <!-- Comment Modal -->
-  <div class="modal" id="comment-modal">
-    <div class="modal-content">
-      <h2>Leave Feedback</h2>
-      <textarea id="comment-text" placeholder="Your feedback..."></textarea>
-      <div class="modal-actions">
-        <button class="cancel" id="comment-cancel">Cancel</button>
-        <button class="submit" id="comment-submit">Submit</button>
-      </div>
+<header>
+  <img src="karmakit-logo.png" class="logo" alt="KarmaKit Logo">
+  <h1>KarmaKit</h1>
+  <p class="tagline">Helping builders get users and validate ideas</p>
+  <nav>
+    <button onclick="navigate('index.html')">Home</button>
+    <button onclick="navigate('submit.html')">Submit Idea</button>
+    <button onclick="navigate('profile.html')">Profile</button>
+  </nav>
+  <p id="greeting"></p>
+</header>
+<main>
+  <div class="card-container" id="card-container"></div>
+  <div class="controls">
+    <button id="pass-btn">Maybe Later</button>
+    <button id="like-btn">Love This!</button>
+  </div>
+  <button class="submit-cta" onclick="navigate('submit.html')">Submit your idea/app</button>
+</main>
+<div class="modal" id="comment-modal">
+  <div class="modal-content">
+    <h2>Leave Feedback</h2>
+    <textarea id="comment-text" placeholder="Your feedback..."></textarea>
+    <div class="modal-actions">
+      <button class="cancel" id="comment-cancel">Cancel</button>
+      <button class="submit" id="comment-submit">Submit</button>
     </div>
   </div>
-
+</div>
 <script>
-// Navigation helper
-function navigate(page) { window.location=page; }
-
-// Data init
-function init() {
-  if(!localStorage.getItem('companies')) {
-    localStorage.setItem('companies', JSON.stringify([
-      {id:1,name:"Acme Analytics",logo:"https://via.placeholder.com/100",idea:"AI-powered insights",link:"#",likes:0,comments:[]},
-      {id:2,name:"Beta Builders",logo:"https://via.placeholder.com/100",idea:"Project tracking",link:"#",likes:0,comments:[]}
+function navigate(page){window.location=page;}
+function initData(){
+  if(!localStorage.getItem('companies')){
+    localStorage.setItem('companies',JSON.stringify([
+      {id:1,name:"Acme Analytics",logo:"https://via.placeholder.com/100",idea:"AI-powered insights for startups",link:"#",likes:0,comments:[],connections:[],founderContact:"founder@acme.com"},
+      {id:2,name:"Beta Builders",logo:"https://via.placeholder.com/100",idea:"Simple project tracking for devs",link:"#",likes:0,comments:[],connections:[],founderContact:"founder@beta.com"}
     ]));
   }
   if(!localStorage.getItem('karma')) localStorage.setItem('karma','0');
   if(!localStorage.getItem('profile')) localStorage.setItem('profile', JSON.stringify({user:'Guest',company:''}));
 }
-let companies, currentIndex=0;
-
-function load() { companies = JSON.parse(localStorage.getItem('companies')); }
-function saveCompanies() { localStorage.setItem('companies', JSON.stringify(companies)); }
-function addKarma(points) {
-  let k = parseInt(localStorage.getItem('karma'),10); k+=points;
-  localStorage.setItem('karma', k.toString());
-  renderGreeting();
-}
-function renderGreeting() {
-  const profile = JSON.parse(localStorage.getItem('profile'));
-  document.getElementById('greeting').textContent = `Hello, ${profile.user}! You have ${localStorage.getItem('karma')} karma.`;
-}
-function renderCard() {
-  const c = companies[currentIndex];
-  const container = document.getElementById('card-container');
-  container.innerHTML = '';
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = `
-    <h2>${c.name}</h2>
-    <img src="${c.logo}" alt="${c.name}">
-    <p>${c.idea}</p>
-    <div class="meta">
-      <span>👍 ${c.likes}</span>
-      <span>💬 ${c.comments.length}</span>
-    </div>
-    <div class="card-actions">
-      <a href="${c.link}" target="_blank">Visit</a>
-      <button id="comment-btn">Comment</button>
-    </div>`;
-  container.appendChild(card);
-  setTimeout(()=>card.classList.add('show'), 50);
-  document.getElementById('comment-btn').onclick = () => openModal();
-}
-
-function nextCard() {
-  currentIndex = (currentIndex+1) % companies.length;
-  renderCard();
-}
-
-function handlePass() { addKarma(1); nextCard(); }
-function handleLike() { companies[currentIndex].likes++; saveCompanies(); addKarma(2); nextCard(); }
-
-function openModal() {
-  document.getElementById('comment-modal').classList.add('active');
-}
-function closeModal() {
-  document.getElementById('comment-modal').classList.remove('active');
-}
-function submitComment() {
-  const txt = document.getElementById('comment-text').value.trim();
-  if(txt) {
-    companies[currentIndex].comments.push(txt);
-    saveCompanies();
-    addKarma(3);
-    document.getElementById('comment-text').value = '';
-    closeModal();
-    alert('Feedback saved!');
-    renderCard();
-  }
-}
-
-window.onload = () => {
-  init(); load(); renderGreeting(); renderCard();
-  document.getElementById('pass-btn').onclick = handlePass;
-  document.getElementById('like-btn').onclick = handleLike;
-  document.getElementById('comment-cancel').onclick = closeModal;
-  document.getElementById('comment-submit').onclick = submitComment;
-};
+let companies,index=0;
+function loadData(){companies=JSON.parse(localStorage.getItem('companies'));}
+function saveData(){localStorage.setItem('companies',JSON.stringify(companies));}
+function addKarma(points){let k=parseInt(localStorage.getItem('karma'),10)||0;k+=points;localStorage.setItem('karma',k.toString());renderGreeting();}
+function renderGreeting(){let p=JSON.parse(localStorage.getItem('profile'));document.getElementById('greeting').textContent=`Hello, ${p.user}! You have ${localStorage.getItem('karma')} karma.`;}
+function renderCard(){const c=companies[index],ct=document.getElementById('card-container');ct.innerHTML='';let card=document.createElement('div');card.className='card';card.innerHTML=`<h2>${c.name}</h2><img src="${c.logo}" alt="${c.name}"><p>${c.idea}</p><div class="meta"><span>👍 ${c.likes}</span><span>💬 ${c.comments.length}</span><span>🤝 ${c.connections.length}</span></div><div class="card-actions"><a href="${c.link}" target="_blank">Visit</a><button id="connect-btn" class="connect-btn">Connect</button...
+function nextCard(){index=(index+1)%companies.length;renderCard();}
+function handlePass(){addKarma(1);nextCard();}
+function handleLike(){companies[index].likes++;saveData();addKarma(2);nextCard();}
+function handleConnect(){let m=prompt("Message to founder:");if(m){companies[index].connections.push({msg:m,time:Date.now()});saveData();addKarma(4);alert("Connection request sent! +4 karma");nextCard();}}
+function openModal(){document.getElementById('comment-modal').classList.add('active');}
+function closeModal(){document.getElementById('comment-modal').classList.remove('active');}
+function submitComment(){let t=document.getElementById('comment-text').value.trim();if(t){companies[index].comments.push(t);saveData();addKarma(3);document.getElementById('comment-text').value='';closeModal();alert("Feedback saved! +3 karma");renderCard();}}
+window.onload=function(){initData();loadData();renderGreeting();renderCard();document.getElementById('pass-btn').onclick=handlePass;document.getElementById('like-btn').onclick=handleLike;document.getElementById('comment-cancel').onclick=closeModal;document.getElementById('comment-submit').onclick=submitComment;};
 </script>
 </body>
 </html>
