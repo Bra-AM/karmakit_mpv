@@ -1,26 +1,36 @@
-# KarmaKit - Functional & Beautiful MVP
+# KarmaKit
 
-**Design & Logic**:
-- **Theme**: Soft gradients and accent colors, Poppins font, modern cards with animations.
-- **Pages**:
-  - `index.html`: Home deck with Pass/Like/Comment. Uses modal for comments.
-  - `submit.html`: Add ideas (+5 karma).
-  - `profile.html`: Set user & company; view karma & feedback stats.
-- **Data**: Stored in `localStorage`.
-  - `companies`: Array of idea objects with feedback counts.
-  - `profile`: User info.
-  - `karma`: Total karma points.
-- **Interactions**:
-  - Pass = +1, Like = +2, Comment = +3, Submit = +5.
-  - Smooth fade-in card transitions.
-  - Responsive design.
+KarmaKit is a pop-up feedback exchange platform built for hackathons, demo days, and startup communities. Builders get feedback. Reviewers earn Karma Points.
 
-**Deployment**:
-Host these files on any static server (GitHub Pages, Netlify).
+## 🔥 Features
+- Swipe through 10 featured project cards
+- Leave comments (coming soon)
+- Earn Karma Points (mocked)
+- Submit your own app for feedback
+- View your profile with Karma count and app info
 
-## Files
-- `index.html`
-- `submit.html`
-- `profile.html`
-- `style.css`
-- `karmakit-logo.png`
+## 🛠 Tech Stack
+- HTML / CSS / JavaScript
+- No backend (yet) — static MVP
+- Easily deployed to GitHub Pages, Netlify, or Vercel
+
+## 🚀 Deployment Steps (GitHub Pages)
+1. Create or clone your repo
+2. Add these files:
+   - `index.html`
+   - `submit.html`
+   - `profile.html`
+   - `style.css`
+   - `karmakit-logo.png`
+   - `README.md`
+3. Commit and push to `main`
+4. In GitHub, go to **Settings > Pages**, set source to `main` branch `/ (root)`
+5. Visit your live site!
+
+## ✅ Future Improvements
+- Store data using `localStorage` or Firebase
+- Comment section with voting
+- User authentication
+- Real Karma Point leaderboard
+
+Built with 💛 at SpurHacks 2025
